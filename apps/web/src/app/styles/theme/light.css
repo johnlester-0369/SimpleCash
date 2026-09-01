@@ -1,0 +1,222 @@
+/* ============================================================
+   LIGHT THEME VARIABLES
+   
+   Structure:
+   1. :root - Define all light theme values with --light- prefix
+   2. :root - Reference layer mapping standard variables to light values
+   
+   This separation allows theme switching by changing the reference
+   without redefining the actual color values.
+   
+   NOTE: The reference layer below uses a --rgb- prefix (not --color-)
+   on purpose. src/styles/tailwind-theme.css owns the --color-* names
+   inside its @theme block, wrapping these raw RGB triplets in rgb().
+   Reusing --color-* here would redeclare the same custom property at
+   :root twice, and the @theme copy of var(--color-x) would resolve to
+   itself — a circular reference that Tailwind/CSS treats as invalid,
+   silently breaking every bg-primary / text-on-surface / etc. utility.
+   ============================================================ */
+
+:root {
+  /* ==================== PRIMARY ==================== */
+  --light-color-primary: 5 150 105;
+  --light-color-on-primary: 255 255 255;
+  --light-color-primary-container: 209 250 229;
+  --light-color-on-primary-container: 6 78 59;
+
+  /* ==================== SECONDARY ==================== */
+  --light-color-secondary: 126 93 209;
+  --light-color-on-secondary: 255 255 255;
+  --light-color-secondary-container: 232 228 254;
+  --light-color-on-secondary-container: 54 38 94;
+
+  /* ==================== TERTIARY ==================== */
+  --light-color-tertiary: 168 72 181;
+  --light-color-on-tertiary: 255 255 255;
+  --light-color-tertiary-container: 247 222 250;
+  --light-color-on-tertiary-container: 75 28 81;
+
+  /* ==================== SURFACE SYSTEM ==================== */
+  --light-color-surface: 255 255 255;
+  --light-color-on-surface: 0 0 0;
+  --light-color-surface-variant: 212 212 212;
+  --light-color-on-surface-variant: 64 64 64;
+  --light-color-surface-container-lowest: 255 255 255;
+  --light-color-surface-container-low: 250 250 250;
+  --light-color-surface-container: 245 245 245;
+  --light-color-surface-container-high: 230 230 230;
+  --light-color-surface-container-highest: 216 216 216;
+  --light-color-surface-bright: 255 255 255;
+  --light-color-surface-dim: 161 161 161;
+
+  /* ==================== INVERSE ==================== */
+  --light-color-inverse-surface: 38 38 38;
+  --light-color-inverse-on-surface: 250 250 250;
+  --light-color-inverse-primary: 167 243 208;
+
+  /* ==================== OUTLINE ==================== */
+  --light-color-outline: 115 115 115;
+  --light-color-outline-variant: 161 161 161;
+
+  /* ==================== SCRIM & SHADOW ==================== */
+  --light-color-scrim: 0 0 0;
+  --light-color-shadow: 0 0 0;
+
+  /* ==================== ERROR ==================== */
+  --light-color-error: 231 0 11;
+  --light-color-on-error: 254 242 242;
+  --light-color-error-container: 255 226 226;
+  --light-color-on-error-container: 130 24 26;
+
+  /* ==================== SUCCESS ==================== */
+  --light-color-success: 0 130 54;
+  --light-color-on-success: 240 253 244;
+  --light-color-success-container: 220 252 231;
+  --light-color-on-success-container: 13 84 43;
+
+  /* ==================== WARNING ==================== */
+  --light-color-warning: 225 113 0;
+  --light-color-on-warning: 255 251 235;
+  --light-color-warning-container: 254 243 198;
+  --light-color-on-warning-container: 123 51 6;
+
+  /* ==================== INFO ==================== */
+  --light-color-info: 0 132 209;
+  --light-color-on-info: 240 249 255;
+  --light-color-info-container: 223 242 254;
+  --light-color-on-info-container: 2 74 112;
+
+  /* ==================== PRIMARY GRADIENT ==================== */
+  --light-color-gradient-primary: linear-gradient(
+    135deg,
+    rgb(16, 163, 127) 0%,
+    rgb(5, 122, 85) 100%
+  );
+
+  /* ==================== SECONDARY GRADIENT ==================== */
+  --light-color-gradient-secondary: linear-gradient(
+    135deg,
+    rgb(128, 87, 221) 0%,
+    rgb(55, 109, 232) 100%
+  );
+
+  /* ==================== TERTIARY GRADIENT ==================== */
+  --light-color-gradient-tertiary: linear-gradient(
+    135deg,
+    rgb(170, 68, 184) 0%,
+    rgb(127, 88, 222) 100%
+  );
+
+  /* ==================== ERROR GRADIENT ==================== */
+  --light-color-gradient-error: linear-gradient(
+    135deg,
+    rgb(210, 53, 43) 0%,
+    rgb(174, 97, 20) 100%
+  );
+
+  /* ==================== SUCCESS GRADIENT ==================== */
+  --light-color-gradient-success: linear-gradient(
+    135deg,
+    rgb(24, 143, 58) 0%,
+    rgb(25, 138, 119) 100%
+  );
+
+  /* ==================== WARNING GRADIENT ==================== */
+  --light-color-gradient-warning: linear-gradient(
+    135deg,
+    rgb(179, 92, 19) 0%,
+    rgb(150, 113, 20) 100%
+  );
+
+  /* ==================== INFO GRADIENT ==================== */
+  --light-color-gradient-info: linear-gradient(
+    135deg,
+    rgb(23, 125, 194) 0%,
+    rgb(24, 133, 154) 100%
+  );
+}
+
+/* Reference layer: Maps --rgb-* variables to light theme raw values.
+   src/styles/tailwind-theme.css reads these --rgb-* names inside its
+   @theme block and wraps them in rgb(...) to produce the --color-*
+   tokens Tailwind utilities (bg-primary, text-on-surface, ...) use.
+   Keeping this layer's names distinct from --color-* is what avoids
+   the circular self-reference described above. */
+:root {
+  /* PRIMARY */
+  --rgb-primary: var(--light-color-primary);
+  --rgb-on-primary: var(--light-color-on-primary);
+  --rgb-primary-container: var(--light-color-primary-container);
+  --rgb-on-primary-container: var(--light-color-on-primary-container);
+
+  /* SECONDARY */
+  --rgb-secondary: var(--light-color-secondary);
+  --rgb-on-secondary: var(--light-color-on-secondary);
+  --rgb-secondary-container: var(--light-color-secondary-container);
+  --rgb-on-secondary-container: var(--light-color-on-secondary-container);
+
+  /* TERTIARY */
+  --rgb-tertiary: var(--light-color-tertiary);
+  --rgb-on-tertiary: var(--light-color-on-tertiary);
+  --rgb-tertiary-container: var(--light-color-tertiary-container);
+  --rgb-on-tertiary-container: var(--light-color-on-tertiary-container);
+
+  /* SURFACE SYSTEM */
+  --rgb-surface: var(--light-color-surface);
+  --rgb-on-surface: var(--light-color-on-surface);
+  --rgb-surface-variant: var(--light-color-surface-variant);
+  --rgb-on-surface-variant: var(--light-color-on-surface-variant);
+  --rgb-surface-container-lowest: var(--light-color-surface-container-lowest);
+  --rgb-surface-container-low: var(--light-color-surface-container-low);
+  --rgb-surface-container: var(--light-color-surface-container);
+  --rgb-surface-container-high: var(--light-color-surface-container-high);
+  --rgb-surface-container-highest: var(--light-color-surface-container-highest);
+  --rgb-surface-bright: var(--light-color-surface-bright);
+  --rgb-surface-dim: var(--light-color-surface-dim);
+
+  /* INVERSE — bridged into @theme via tailwind-theme.css; must use the --rgb- prefix like every other role to avoid the self-reference collision (see file header). */
+  --rgb-inverse-surface: var(--light-color-inverse-surface);
+  --rgb-inverse-on-surface: var(--light-color-inverse-on-surface);
+  --rgb-inverse-primary: var(--light-color-inverse-primary);
+
+  /* OUTLINE */
+  --rgb-outline: var(--light-color-outline);
+  --rgb-outline-variant: var(--light-color-outline-variant);
+
+  /* SCRIM & SHADOW */
+  --rgb-scrim: var(--light-color-scrim);
+  --rgb-shadow: var(--light-color-shadow);
+
+  /* ERROR */
+  --rgb-error: var(--light-color-error);
+  --rgb-on-error: var(--light-color-on-error);
+  --rgb-error-container: var(--light-color-error-container);
+  --rgb-on-error-container: var(--light-color-on-error-container);
+
+  /* SUCCESS */
+  --rgb-success: var(--light-color-success);
+  --rgb-on-success: var(--light-color-on-success);
+  --rgb-success-container: var(--light-color-success-container);
+  --rgb-on-success-container: var(--light-color-on-success-container);
+
+  /* WARNING */
+  --rgb-warning: var(--light-color-warning);
+  --rgb-on-warning: var(--light-color-on-warning);
+  --rgb-warning-container: var(--light-color-warning-container);
+  --rgb-on-warning-container: var(--light-color-on-warning-container);
+
+  /* INFO */
+  --rgb-info: var(--light-color-info);
+  --rgb-on-info: var(--light-color-on-info);
+  --rgb-info-container: var(--light-color-info-container);
+  --rgb-on-info-container: var(--light-color-on-info-container);
+
+  /* GRADIENTS (not re-exposed via @theme, so no collision — left as --color-*) */
+  --color-gradient-primary: var(--light-color-gradient-primary);
+  --color-gradient-secondary: var(--light-color-gradient-secondary);
+  --color-gradient-tertiary: var(--light-color-gradient-tertiary);
+  --color-gradient-error: var(--light-color-gradient-error);
+  --color-gradient-success: var(--light-color-gradient-success);
+  --color-gradient-warning: var(--light-color-gradient-warning);
+  --color-gradient-info: var(--light-color-gradient-info);
+}

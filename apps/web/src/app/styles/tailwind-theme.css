@@ -1,0 +1,279 @@
+/* ============================================================
+   TAILWIND V4 THEME BRIDGE
+   
+   CSS-native replacement for the `theme.extend` key in tailwind.config.js.
+   Every entry below re-exposes an existing --rgb-* --typography-*
+   --spacing-* etc. custom property (defined in theme/light.css,
+   theme/dark.css, and tokens.css) as a Tailwind v4 @theme token,
+   so utility class names generated for components (bg-primary,
+   text-label-md, duration-fast, ease-standard, shadow-elevation-1,
+   opacity-state-hover, z-modal, ...) remain byte-identical to the
+   v3 setup. src/components/* consumes only these class names and
+   is never touched by this migration.
+   
+   This file must be imported by app.css BEFORE the Tailwind
+   entrypoint import so @theme tokens are registered before utility
+   generation runs.
+
+   IMPORTANT: the color entries below read from the --rgb-* names
+   defined in theme/light.css / theme/dark.css, NOT from --color-*.
+   @theme emits its declarations as real :root custom properties, so
+   if this block used --color-primary: rgb(var(--color-primary)),
+   it would redeclare --color-primary at the same scope the theme
+   reference layer already declares it, and the inner var(--color-primary)
+   would resolve to itself — a circular reference that CSS treats as
+   invalid, silently breaking every color utility. Reading from the
+   distinctly-named --rgb-* layer avoids that collision.
+   ============================================================ */
+
+@theme {
+  /* ==================== COLORS ====================
+     v4 applies opacity modifiers (e.g. bg-primary/50) automatically via
+     color-mix(), so the v3-only <alpha-value> placeholder is invalid CSS
+     here and has been removed — each entry wraps the --rgb-* triplet
+     already defined upstream in theme/light.css and theme/dark.css. */
+  --color-primary: rgb(var(--rgb-primary));
+  --color-on-primary: rgb(var(--rgb-on-primary));
+  --color-primary-container: rgb(var(--rgb-primary-container));
+  --color-on-primary-container: rgb(var(--rgb-on-primary-container));
+
+  --color-secondary: rgb(var(--rgb-secondary));
+  --color-on-secondary: rgb(var(--rgb-on-secondary));
+  --color-secondary-container: rgb(var(--rgb-secondary-container));
+  --color-on-secondary-container: rgb(var(--rgb-on-secondary-container));
+
+  --color-tertiary: rgb(var(--rgb-tertiary));
+  --color-on-tertiary: rgb(var(--rgb-on-tertiary));
+  --color-tertiary-container: rgb(var(--rgb-tertiary-container));
+  --color-on-tertiary-container: rgb(var(--rgb-on-tertiary-container));
+
+  --color-surface: rgb(var(--rgb-surface));
+  --color-on-surface: rgb(var(--rgb-on-surface));
+  --color-surface-variant: rgb(var(--rgb-surface-variant));
+  --color-on-surface-variant: rgb(var(--rgb-on-surface-variant));
+  --color-surface-container-lowest: rgb(var(--rgb-surface-container-lowest));
+  --color-surface-container-low: rgb(var(--rgb-surface-container-low));
+  --color-surface-container: rgb(var(--rgb-surface-container));
+  --color-surface-container-high: rgb(var(--rgb-surface-container-high));
+  --color-surface-container-highest: rgb(var(--rgb-surface-container-highest));
+  --color-surface-bright: rgb(var(--rgb-surface-bright));
+  --color-surface-dim: rgb(var(--rgb-surface-dim));
+
+  /* INVERSE — restores the v3 bg-inverse-surface / text-inverse-on-surface /
+    text-inverse-primary utilities; this bridge previously omitted them. */
+  --color-inverse-surface: rgb(var(--rgb-inverse-surface));
+  --color-inverse-on-surface: rgb(var(--rgb-inverse-on-surface));
+  --color-inverse-primary: rgb(var(--rgb-inverse-primary));
+
+  --color-outline: rgb(var(--rgb-outline));
+  --color-outline-variant: rgb(var(--rgb-outline-variant));
+
+  --color-scrim: rgb(var(--rgb-scrim));
+  --color-shadow: rgb(var(--rgb-shadow));
+
+  --color-error: rgb(var(--rgb-error));
+  --color-on-error: rgb(var(--rgb-on-error));
+  --color-error-container: rgb(var(--rgb-error-container));
+  --color-on-error-container: rgb(var(--rgb-on-error-container));
+
+  --color-success: rgb(var(--rgb-success));
+  --color-on-success: rgb(var(--rgb-on-success));
+  --color-success-container: rgb(var(--rgb-success-container));
+  --color-on-success-container: rgb(var(--rgb-on-success-container));
+
+  --color-warning: rgb(var(--rgb-warning));
+  --color-on-warning: rgb(var(--rgb-on-warning));
+  --color-warning-container: rgb(var(--rgb-warning-container));
+  --color-on-warning-container: rgb(var(--rgb-on-warning-container));
+
+  --color-info: rgb(var(--rgb-info));
+  --color-on-info: rgb(var(--rgb-on-info));
+  --color-info-container: rgb(var(--rgb-info-container));
+  --color-on-info-container: rgb(var(--rgb-on-info-container));
+
+  /* ==================== TYPOGRAPHY ==================== */
+  --font-brand: var(--font-family-brand);
+  --font-plain: var(--font-family-plain);
+  --font-mono: var(--font-family-mono);
+
+  --text-display-lg: var(--typography-display-large-font-size);
+  --text-display-lg--line-height: var(--typography-display-large-line-height);
+  --text-display-lg--letter-spacing: var(
+    --typography-display-large-letter-spacing
+  );
+  --text-display-lg--font-weight: var(--typography-display-large-font-weight);
+
+  --text-display-md: var(--typography-display-medium-font-size);
+  --text-display-md--line-height: var(--typography-display-medium-line-height);
+  --text-display-md--letter-spacing: var(
+    --typography-display-medium-letter-spacing
+  );
+  --text-display-md--font-weight: var(--typography-display-medium-font-weight);
+
+  --text-display-sm: var(--typography-display-small-font-size);
+  --text-display-sm--line-height: var(--typography-display-small-line-height);
+  --text-display-sm--letter-spacing: var(
+    --typography-display-small-letter-spacing
+  );
+  --text-display-sm--font-weight: var(--typography-display-small-font-weight);
+
+  --text-headline-lg: var(--typography-headline-large-font-size);
+  --text-headline-lg--line-height: var(--typography-headline-large-line-height);
+  --text-headline-lg--letter-spacing: var(
+    --typography-headline-large-letter-spacing
+  );
+  --text-headline-lg--font-weight: var(--typography-headline-large-font-weight);
+
+  --text-headline-md: var(--typography-headline-medium-font-size);
+  --text-headline-md--line-height: var(
+    --typography-headline-medium-line-height
+  );
+  --text-headline-md--letter-spacing: var(
+    --typography-headline-medium-letter-spacing
+  );
+  --text-headline-md--font-weight: var(
+    --typography-headline-medium-font-weight
+  );
+
+  --text-headline-sm: var(--typography-headline-small-font-size);
+  --text-headline-sm--line-height: var(--typography-headline-small-line-height);
+  --text-headline-sm--letter-spacing: var(
+    --typography-headline-small-letter-spacing
+  );
+  --text-headline-sm--font-weight: var(--typography-headline-small-font-weight);
+
+  --text-title-lg: var(--typography-title-large-font-size);
+  --text-title-lg--line-height: var(--typography-title-large-line-height);
+  --text-title-lg--letter-spacing: var(--typography-title-large-letter-spacing);
+  --text-title-lg--font-weight: var(--typography-title-large-font-weight);
+
+  --text-title-md: var(--typography-title-medium-font-size);
+  --text-title-md--line-height: var(--typography-title-medium-line-height);
+  --text-title-md--letter-spacing: var(
+    --typography-title-medium-letter-spacing
+  );
+  --text-title-md--font-weight: var(--typography-title-medium-font-weight);
+
+  --text-title-sm: var(--typography-title-small-font-size);
+  --text-title-sm--line-height: var(--typography-title-small-line-height);
+  --text-title-sm--letter-spacing: var(--typography-title-small-letter-spacing);
+  --text-title-sm--font-weight: var(--typography-title-small-font-weight);
+
+  --text-body-lg: var(--typography-body-large-font-size);
+  --text-body-lg--line-height: var(--typography-body-large-line-height);
+  --text-body-lg--letter-spacing: var(--typography-body-large-letter-spacing);
+  --text-body-lg--font-weight: var(--typography-body-large-font-weight);
+
+  --text-body-md: var(--typography-body-medium-font-size);
+  --text-body-md--line-height: var(--typography-body-medium-line-height);
+  --text-body-md--letter-spacing: var(--typography-body-medium-letter-spacing);
+  --text-body-md--font-weight: var(--typography-body-medium-font-weight);
+
+  --text-body-sm: var(--typography-body-small-font-size);
+  --text-body-sm--line-height: var(--typography-body-small-line-height);
+  --text-body-sm--letter-spacing: var(--typography-body-small-letter-spacing);
+  --text-body-sm--font-weight: var(--typography-body-small-font-weight);
+
+  --text-label-lg: var(--typography-label-large-font-size);
+  --text-label-lg--line-height: var(--typography-label-large-line-height);
+  --text-label-lg--letter-spacing: var(--typography-label-large-letter-spacing);
+  --text-label-lg--font-weight: var(--typography-label-large-font-weight);
+
+  --text-label-md: var(--typography-label-medium-font-size);
+  --text-label-md--line-height: var(--typography-label-medium-line-height);
+  --text-label-md--letter-spacing: var(
+    --typography-label-medium-letter-spacing
+  );
+  --text-label-md--font-weight: var(--typography-label-medium-font-weight);
+
+  --text-label-sm: var(--typography-label-small-font-size);
+  --text-label-sm--line-height: var(--typography-label-small-line-height);
+  --text-label-sm--letter-spacing: var(--typography-label-small-letter-spacing);
+  --text-label-sm--font-weight: var(--typography-label-small-font-weight);
+
+  /* ==================== SPACING ====================
+     FIXED: this block used to redeclare --spacing-0..--spacing-96 as
+     var(--spacing-0) etc. — a self-reference invalid at computed-value
+     time that silently zeroed every p-* m-* gap-* w-* utility. A single
+     --spacing multiplier lets Tailwind v4 generate the full scale (and
+     any arbitrary value) from the --spacing-base value in tokens.css
+     directly, which is how Tailwind implements its own default scale. */
+  --spacing-px: 1px;
+  --spacing: var(--spacing-base);
+
+  /* ==================== BOX SHADOW (Elevation) ====================
+     FIXED: reads the --raw-shadow-* layer (renamed in tokens.css)
+     instead of self-referencing its own name — same root cause as
+     the SPACING fix above. */
+  --shadow-elevation-0: var(--raw-shadow-elevation-0);
+  --shadow-elevation-1: var(--raw-shadow-elevation-1);
+  --shadow-elevation-2: var(--raw-shadow-elevation-2);
+  --shadow-elevation-3: var(--raw-shadow-elevation-3);
+  --shadow-elevation-4: var(--raw-shadow-elevation-4);
+  --shadow-elevation-5: var(--raw-shadow-elevation-5);
+  --shadow-elevation-1-soft: var(--raw-shadow-elevation-1-soft);
+  --shadow-elevation-1-medium: var(--raw-shadow-elevation-1-medium);
+  --shadow-elevation-1-hard: var(--raw-shadow-elevation-1-hard);
+  --shadow-elevation-2-soft: var(--raw-shadow-elevation-2-soft);
+  --shadow-elevation-2-medium: var(--raw-shadow-elevation-2-medium);
+  --shadow-elevation-2-hard: var(--raw-shadow-elevation-2-hard);
+  --shadow-elevation-3-soft: var(--raw-shadow-elevation-3-soft);
+  --shadow-elevation-3-medium: var(--raw-shadow-elevation-3-medium);
+  --shadow-elevation-3-hard: var(--raw-shadow-elevation-3-hard);
+  --shadow-inner: var(--raw-shadow-inner);
+  --shadow-inner-lg: var(--raw-shadow-inner-lg);
+  --shadow-glow-sm: var(--raw-shadow-glow-sm);
+  --shadow-glow-md: var(--raw-shadow-glow-md);
+  --shadow-glow-lg: var(--raw-shadow-glow-lg);
+
+  /* ==================== Z-INDEX ==================== */
+  --z-index-deep: var(--z-deep);
+  --z-index-base: var(--z-base);
+  --z-index-raised: var(--z-raised);
+  --z-index-sticky: var(--z-sticky);
+  --z-index-fixed: var(--z-fixed);
+  --z-index-drawer: var(--z-drawer);
+  --z-index-dropdown: var(--z-dropdown);
+  --z-index-modal-backdrop: var(--z-modal-backdrop);
+  --z-index-modal: var(--z-modal);
+  --z-index-popover: var(--z-popover);
+  --z-index-tooltip: var(--z-tooltip);
+  --z-index-notification: var(--z-notification);
+  --z-index-overlay: var(--z-overlay);
+  --z-index-max: var(--z-max);
+
+  /* ==================== TRANSITION DURATION ==================== */
+  --duration-short-1: var(--duration-short1);
+  --duration-short-2: var(--duration-short2);
+  --duration-short-3: var(--duration-short3);
+  --duration-short-4: var(--duration-short4);
+  --duration-medium-1: var(--duration-medium1);
+  --duration-medium-2: var(--duration-medium2);
+  --duration-medium-3: var(--duration-medium3);
+  --duration-medium-4: var(--duration-medium4);
+  --duration-long-1: var(--duration-long1);
+  --duration-long-2: var(--duration-long2);
+  --duration-long-3: var(--duration-long3);
+  --duration-long-4: var(--duration-long4);
+  --duration-instant: var(--raw-duration-instant);
+  --duration-fast: var(--raw-duration-fast);
+  --duration-normal: var(--raw-duration-normal);
+  --duration-slow: var(--raw-duration-slow);
+  --duration-slower: var(--raw-duration-slower);
+
+  /* ==================== TRANSITION TIMING FUNCTION ==================== */
+  --ease-standard: var(--easing-standard);
+  --ease-standard-decelerate: var(--easing-standard-decelerate);
+  --ease-standard-accelerate: var(--easing-standard-accelerate);
+  --ease-emphasized: var(--easing-emphasized);
+  --ease-emphasized-decelerate: var(--easing-emphasized-decelerate);
+  --ease-emphasized-accelerate: var(--easing-emphasized-accelerate);
+
+  /* ==================== OPACITY (State Layers) ==================== */
+  --opacity-state-hover: var(--state-hover-opacity);
+  --opacity-state-focus: var(--state-focus-opacity);
+  --opacity-state-pressed: var(--state-pressed-opacity);
+  --opacity-state-dragged: var(--state-dragged-opacity);
+  --opacity-state-disabled: var(--state-disabled-opacity);
+  --opacity-state-disabled-container: var(--state-disabled-container-opacity);
+}

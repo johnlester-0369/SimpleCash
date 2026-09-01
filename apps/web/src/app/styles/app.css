@@ -1,0 +1,91 @@
+/**
+ * App Styles Entry Point
+ *
+ * This file is the sole PostCSS entry point. It composes all style layers
+ * in the correct dependency order:
+ *
+ *   theme/   → Per-theme CSS custom property values (color roles)
+ *   tokens   → Design system tokens: typography, spacing, motion, layout, shadows
+ *   base     → HTML element defaults and scrollbar normalization via @layer base
+ *   utilities → Custom utility classes via @layer utilities
+ *   animations → @keyframes library referenced by Tailwind animate-* classes
+ *
+ * @tailwind directives appear after imports so PostCSS-import inlines all
+ * @layer declarations before Tailwind resolves layer injection order.
+ *
+ * WCAG 2.1 AA Compliant
+ *
+ * Typography Updated: January 2026
+ * - Body text sizes increased per 2026 accessibility best practices
+ * - Line heights normalized to WCAG 2.1 minimum of 1.5 for body text
+ * - Label sizes adjusted for improved readability
+ *
+ * Typography Audit: January 2026 (WCAG 2.2 Compliance Review)
+ * - Title-small line-height increased to 1.5 for WCAG compliance
+ * - Label line-heights increased to 1.5 for improved UI readability
+ * - All body text confirmed at 1.5+ line-height
+ * - Font sizes confirmed: body-md=16px (WCAG minimum), body-sm=14px
+ */
+
+/* -----------------------------------------------------------
+  Tailwind v4 Entrypoint (moved to the top)
+  Imported FIRST so Tailwind internal cascade-layer order
+  (theme, base, components, utilities) registers before this
+  project own @theme (tailwind-theme.css) and @layer base /
+  @layer utilities (base.css, utilities.css) blocks. CSS layer
+  priority is fixed by order of FIRST declaration, not by where
+  a layer content is added later — importing tailwindcss
+  after those files silently reordered layer priority and was
+  the root cause of dark-mode color tokens not syncing.
+  ----------------------------------------------------------- */
+@import 'tailwindcss';
+
+/* Tailwind v4 does not auto-load tailwind.config.js, so the legacy
+   darkMode: class key there is inert without a @config directive.
+   This @custom-variant is the CSS-native replacement, keeping the
+   .dark class already toggled by the app in control of every dark:
+   utility instead of the OS prefers-color-scheme default. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* -----------------------------------------------------------
+  1. Theme Color Variables
+  Color role → value mapping. Switching themes only requires
+  overriding these variables, not touching any component styles.
+  ----------------------------------------------------------- */
+@import './theme/light.css';
+@import './theme/dark.css';
+
+/* -----------------------------------------------------------
+  2. Design Token Variables
+  All CSS custom properties for the design system scale.
+  ----------------------------------------------------------- */
+@import './tokens.css';
+
+/* -----------------------------------------------------------
+  2b. Tailwind v4 Theme Bridge
+  Re-exposes design tokens as @theme entries so v4 utility
+  generator keeps producing the exact class names components
+  (e.g. Button.tsx) already depend on. Must load before the
+  Tailwind entrypoint import below.
+  ----------------------------------------------------------- */
+@import './tailwind-theme.css';
+
+/* -----------------------------------------------------------
+  3. Base Layer
+  HTML element defaults, scrollbar normalization, dark mode
+  color-scheme, and reduced-motion overrides.
+  ----------------------------------------------------------- */
+@import './base.css';
+
+/* -----------------------------------------------------------
+  4. Utility Classes
+  Custom utility classes that extend Tailwind utility layer.
+  ----------------------------------------------------------- */
+@import './utilities.css';
+
+/* -----------------------------------------------------------
+  5. Keyframe Animations
+  All @keyframes used by Tailwind animate-* classes and
+  component-level animation utilities.
+  ----------------------------------------------------------- */
+@import './animations.css';
