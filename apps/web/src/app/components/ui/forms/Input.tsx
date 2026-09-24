@@ -44,22 +44,28 @@ const base =
  * Variant classes with consistent border-2 sizing
  */
 const variantClasses: Record<InputVariant, string> = {
-  default: 'bg-transparent border-2 border-outline-variant',
+  default: 'bg-transparent border border-outline-variant',
   subtle:
-    'border-2 border-transparent bg-surface-container hover:bg-surface-container-high',
+    'border border-transparent bg-surface-container hover:bg-surface-container-high',
 }
 
 /**
  * Color classes for focus states
  */
 const colorClasses: Record<InputColor, string> = {
-  primary: 'focus:border-primary',
-  secondary: 'focus:border-secondary',
-  tertiary: 'focus:border-tertiary',
-  info: 'focus:border-info',
-  success: 'focus:border-success',
-  warning: 'focus:border-warning',
-  error: 'focus:border-error',
+  primary:
+    'focus:outline-none focus:border-primary focus:ring-1 focus:ring-inset focus:ring-primary',
+  secondary:
+    'focus:outline-none focus:border-secondary focus:ring-1 focus:ring-inset focus:ring-secondary',
+  tertiary:
+    'focus:outline-none focus:border-tertiary focus:ring-1 focus:ring-inset focus:ring-tertiary',
+  info: 'focus:outline-none focus:border-info focus:ring-1 focus:ring-inset focus:ring-info',
+  success:
+    'focus:outline-none focus:border-success focus:ring-1 focus:ring-inset focus:ring-success',
+  warning:
+    'focus:outline-none focus:border-warning focus:ring-1 focus:ring-inset focus:ring-warning',
+  error:
+    'focus:outline-none focus:border-error focus:ring-1 focus:ring-inset focus:ring-error',
 }
 
 /**
@@ -67,9 +73,9 @@ const colorClasses: Record<InputColor, string> = {
  */
 const stateClasses = {
   error:
-    'border-error text-on-surface focus:border-error bg-error-container/30',
+    'border-error text-on-surface focus:outline-none focus:border-error focus:ring-1 focus:ring-inset focus:ring-error bg-error-container/30',
   success:
-    'border-success text-on-surface focus:border-success bg-success-container/30',
+    'border-success text-on-surface focus:outline-none focus:border-success focus:ring-1 focus:ring-inset focus:ring-success bg-success-container/30',
 }
 
 const sizeClasses: Record<InputSize, string> = {

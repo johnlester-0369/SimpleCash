@@ -3,9 +3,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard,
   LogOut,
-  ChevronDown,
+  ChevronRight,
   User,
-  Settings,
   Wallet,
   Receipt,
 } from 'lucide-react'
@@ -26,18 +25,31 @@ interface NavChildItem {
   icon: React.ReactNode
 }
 
-interface NavItem {
+/**
+ * NavItem is a discriminated union on `children`: a leaf item (no children)
+ * must carry its own path/icon for the Link it renders; a group item is
+ * a clickable label above its children and carries neither — this is what
+ * lets `Settings` below drop `icon`/`path` without losing type safety on
+ * the leaf-item Link `to`/icon usage further down.
+ */
+interface NavLeafItem {
   label: string
   path: string
   icon: React.ReactNode
-  children?: NavChildItem[]
+  children?: undefined
 }
 
+interface NavGroupItem {
+  label: string
+  children: NavChildItem[]
+}
+
+type NavItem = NavLeafItem | NavGroupItem
+
 /**
- * Two entries now that customer management has moved to its own
- * /admin/customer route — Dashboard shows aggregate mock stats,
- * Customers links to the dedicated customer page. Extend this array
- * (with `children` where needed) as more admin routes ship.
+ * Extend this array (with `children` where needed) as more admin routes
+ * ship. Group entries intentionally omit `icon`/`path` — they render as
+ * a section label, not a route.
  */
 const navItems: NavItem[] = [
   {
@@ -56,9 +68,9 @@ const navItems: NavItem[] = [
     icon: <Receipt className="h-5 w-5" />,
   },
   {
+    // Group header only — not a route, so no icon/path here. Rendered as
+    // a clickable muted/semibold label that toggles its children.
     label: 'Settings',
-    icon: <Settings className="h-5 w-5" />,
-    path: ROUTES.ADMIN.ACCOUNT_SETTINGS,
     children: [
       {
         label: 'Account',
@@ -75,34 +87,26 @@ const navItems: NavItem[] = [
  * Vite + React Router conversion: next/link's Link and next/navigation's
  * usePathname/useRouter are replaced with react-router-dom's Link (href
  * -> to), useLocation, and useNavigate — this app has no Next.js runtime.
- * No admin route currently has children — see navItems comment above —
- * but the expand/collapse logic from the source is kept intact so it
- * activates as soon as a NavItem defines `children`.
  */
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const [isLoggingOut, setIsLoggingOut] = useState(false)
 
-  // Track which parent items are expanded.
-  // Any parent that has children starts expanded (always open by default).
+  // Track which group labels are expanded. Groups start expanded by
+  // default so their children are visible on first load.
   const [expandedItems, setExpandedItems] = useState<string[]>(() =>
-    navItems.filter((item) => item.children?.length).map((item) => item.path),
+    navItems.filter((item) => item.children?.length).map((item) => item.label),
   )
 
-  function toggleExpand(path: string) {
+  function toggleExpand(label: string) {
     setExpandedItems((prev) =>
-      prev.includes(path) ? prev.filter((p) => p !== path) : [...prev, path],
+      prev.includes(label) ? prev.filter((l) => l !== label) : [...prev, label],
     )
   }
 
-  function isExpanded(path: string) {
-    return expandedItems.includes(path)
-  }
-
-  function hasActiveChild(children: NavChildItem[] | undefined) {
-    if (!children) return false
-    return children.some((child) => pathname.startsWith(child.path))
+  function isExpanded(label: string) {
+    return expandedItems.includes(label)
   }
 
   async function handleLogout() {
@@ -121,44 +125,40 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   }
 
   function renderNavItem(item: NavItem) {
-    const hasChildren = item.children && item.children.length > 0
-    const isParentActive = hasActiveChild(item.children)
-    const expanded = isExpanded(item.path) || isParentActive
+    // Type narrowing fixes TS2339: isolate NavGroupItem strictly before leaf logic
+    if (item.children) {
+      if (item.children.length === 0) return null
+      const expanded = isExpanded(item.label)
 
-    if (hasChildren) {
       return (
-        <li key={item.path}>
+        <li key={item.label}>
+          {/* Clickable section label — muted + semibold, toggles its
+              children. Chevron rotates 90deg (right → down) rather than
+              swapping icons, so the direction reads as a natural
+              disclosure affordance instead of an unrelated glyph swap. */}
           <button
-            onClick={() => toggleExpand(item.path)}
-            className={cn(
-              'flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-label-lg font-medium transition-colors',
-              isParentActive
-                ? 'bg-primary/10 text-primary'
-                : 'text-on-surface hover:bg-on-surface/[var(--state-hover-opacity)]',
-            )}
+            onClick={() => toggleExpand(item.label)}
+            className="flex w-full cursor-pointer items-center justify-between rounded-lg px-3 pt-3 pb-1 text-label-lg font-semibold text-on-surface-variant transition-colors"
             aria-expanded={expanded}
-            aria-controls={`submenu-${item.path.replace('/', '')}`}
+            aria-controls={`submenu-${item.label.toLowerCase()}`}
           >
-            <span className="flex items-center gap-3">
-              {item.icon}
-              <span>{item.label}</span>
-            </span>
-            <ChevronDown
+            <span>{item.label}</span>
+            <ChevronRight
               className={cn(
-                'h-4 w-4 transition-transform duration-200',
-                expanded && 'rotate-180',
+                'h-4 w-4 shrink-0 transition-transform duration-200',
+                expanded && 'rotate-90',
               )}
             />
           </button>
 
           <ul
-            id={`submenu-${item.path.replace('/', '')}`}
+            id={`submenu-${item.label.toLowerCase()}`}
             className={cn(
-              'mt-1 ml-4 space-y-1 overflow-hidden border-l border-outline-variant pl-3 transition-all duration-200',
+              'mt-1 space-y-1 overflow-hidden transition-all duration-200',
               expanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0',
             )}
           >
-            {item.children?.map((child) => {
+            {item.children.map((child) => {
               const isChildActive = pathname.startsWith(child.path)
               return (
                 <li key={child.path}>
@@ -168,7 +168,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     className={cn(
                       'flex items-center gap-3 rounded-lg px-3 py-2 text-label-lg font-medium transition-colors',
                       isChildActive
-                        ? 'bg-primary text-on-primary hover:bg-primary/90'
+                        ? 'bg-primary/[var(--state-hover-opacity)] text-primary'
                         : 'text-on-surface hover:bg-on-surface/[var(--state-hover-opacity)]',
                     )}
                   >
@@ -192,7 +192,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           className={cn(
             'flex items-center gap-3 rounded-lg px-3 py-2.5 text-label-lg font-medium transition-colors',
             isActive
-              ? 'bg-primary text-on-primary hover:bg-primary/90'
+              ? 'bg-primary/[var(--state-hover-opacity)] text-primary'
               : 'text-on-surface hover:bg-on-surface/[var(--state-hover-opacity)]',
           )}
         >
@@ -215,12 +215,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
       <aside
         className={cn(
-          'fixed top-0 left-0 z-modal flex h-full w-64 flex-col bg-surface transition-transform duration-normal ease-standard border-r border-outline-variant',
+          'fixed top-0 left-0 z-modal flex h-full w-64 flex-col bg-surface transition-transform duration-normal ease-standard border-r border-outline-variant/50',
           'lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:translate-x-0',
           isOpen ? 'translate-x-0' : '-translate-x-full',
         )}
       >
-        <div className="flex h-16 shrink-0 items-center justify-between px-4 border-b border-outline-variant">
+        <div className="flex h-16 shrink-0 items-center justify-between px-4 border-b border-outline-variant/50">
           <div className="flex items-center gap-3">
             <BrandLogo size="md" />
             <BrandName className="whitespace-nowrap font-semibold text-xl text-headline" />

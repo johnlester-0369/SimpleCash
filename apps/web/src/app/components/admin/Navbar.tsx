@@ -114,8 +114,8 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
     // flex children, so without it this header still compresses below
     // 64px whenever sibling <main> content is tall enough to overflow
     // the parent's h-screen bound — exactly the collapsed-navbar bug on
-    // tall pages (dashboard) that never appears on short pages (customer list)
-    <header className="sticky top-0 z-sticky flex h-16 shrink-0 items-center justify-between bg-surface px-4 lg:px-6 border-b border-outline-variant">
+    // tall pages (dashboard) that never appears on short pages
+    <header className="sticky top-0 z-sticky flex h-16 shrink-0 items-center justify-between bg-surface px-4 lg:px-6 border-b border-outline-variant/50">
       <div className="flex items-center gap-4">
         <IconButton
           icon={<Menu />}
@@ -157,7 +157,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
 
         {isUserMenuOpen && !isLoggingOut && (
           <div
-            className="absolute right-0 z-dropdown mt-2 w-64 rounded-lg border-2 border-outline-variant shadow-sm bg-surface"
+            className="absolute right-0 z-dropdown mt-2 w-64 rounded-lg border border-outline-variant/25 shadow-sm bg-surface"
             role="menu"
             aria-orientation="vertical"
           >
