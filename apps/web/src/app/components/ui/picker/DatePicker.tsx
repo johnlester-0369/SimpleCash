@@ -15,31 +15,12 @@ interface DatePickerProps {
 /**
  * DatePicker — thin wrapper around the native <input type="date">.
  *
- * 2026 research on native vs. custom date pickers confirms the native
- * input is keyboard-accessible, locale-aware, and mobile-friendly at 0 KB
- * (vs. react-day-picker's bundle + portal/click-outside/scroll-listener
- * code this file used to carry), and — critically for this component's
- * contract — input.value always normalizes to 'yyyy-MM-dd' regardless of
- * the visible locale format, so no date-fns conversion is needed here;
- * callers (expenses.tsx, income.tsx) keep working with the same ISO
- * string they already passed through the old parseISO/format round-trip.
- *
- * INTENTIONAL SPLIT BEHAVIOR: typing directly into the box (e.g.
- * '05/15/2026') is native <input type="date"> segment-editing and always
- * stays available — the calendar itself only opens via the dedicated
- * icon button below, never from a click on the text portion. This is why
- * the native picker-indicator is hidden AND made pointer-events-none
- * rather than stretched over the input: a full-width transparent
- * indicator would intercept every click and force the calendar open
- * before the user could place a cursor to type.
- *
- * KNOWN LIMITATION (confirmed by the same research): the *visible* text
- * in the box follows the user's OS/browser locale, not a fixed
- * 'MM/DD/YYYY' — e.g. a German OS renders '15.05.2026' for the exact
- * same stored value an American OS renders as '05/15/2026'. Browsers do
- * not expose a standards-based way to override this via HTML/CSS, so
- * this cannot be forced to always read MM/DD/YYYY without reintroducing
- * a JS-driven picker — the very dependency this change removes.
+ * Migrated from SimpleCash-React (src/app/components/ui/picker/DatePicker.tsx)
+ * into the Next.js design-system tree. Behavior is unchanged: the native
+ * input is keyboard-accessible, locale-aware, and mobile-friendly, and
+ * input.value always normalizes to 'yyyy-MM-dd' regardless of the visible
+ * locale format, so callers (expenses-view.tsx, income-view.tsx) keep
+ * passing the same ISO string through.
  */
 export default function DatePicker({
   id,
@@ -52,10 +33,9 @@ export default function DatePicker({
 }: DatePickerProps) {
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // showPicker() is supported in current Chrome/Edge/Firefox and is the
-  // ONLY way this component opens the calendar — the native indicator is
-  // neutralized below, so this button is the sole trigger, keeping the
-  // rest of the box free for manual MM/DD/YYYY typing.
+  // showPicker() is the ONLY way this component opens the calendar — the
+  // native indicator is neutralized below, so this button is the sole
+  // trigger, keeping the rest of the box free for manual typing.
   function openPicker() {
     inputRef.current?.showPicker?.()
   }
@@ -79,19 +59,11 @@ export default function DatePicker({
             // variant so this control sits visually identical to every
             // other form field in the app (same border, radius, focus).
             'w-full text-on-surface focus:outline-none disabled:opacity-state-disabled disabled:cursor-not-allowed transition-all duration-fast',
-            'bg-transparent border-2 border-outline-variant focus:border-primary',
+            'bg-transparent border border-outline-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-inset focus:ring-primary',
             'rounded-lg px-4 py-2.5 pr-10 text-body-md',
-            // WebKit/Blink (Chrome, Edge, Safari) render a native calendar
-            // glyph via this pseudo-element at its default small size/
-            // position. Hiding it AND disabling its pointer events (rather
-            // than stretching it full-width as an earlier version of this
-            // component did) means a click there falls through to plain
-            // text editing instead of force-opening the calendar — only
-            // the explicit icon button below calls showPicker(). Firefox
-            // has no equivalent selector for this pseudo-element, so it
-            // keeps its own small native glyph at the same corner; since
-            // that glyph isn't stretched either, it doesn't intercept
-            // text-area clicks there, so typing still works the same way.
+            // Hide the native calendar glyph and disable its pointer events
+            // so a click there falls through to text editing; only the
+            // explicit icon button below opens the picker.
             '[&::-webkit-calendar-picker-indicator]:pointer-events-none [&::-webkit-calendar-picker-indicator]:opacity-0',
           )}
         />
