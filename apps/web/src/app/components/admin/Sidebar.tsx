@@ -168,7 +168,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     className={cn(
                       'flex items-center gap-3 rounded-lg px-3 py-2 text-label-lg font-medium transition-colors',
                       isChildActive
-                        ? 'bg-primary text-on-primary hover:bg-primary/90'
+                        ? 'bg-primary/[var(--state-hover-opacity)] text-primary'
                         : 'text-on-surface hover:bg-on-surface/[var(--state-hover-opacity)]',
                     )}
                   >
@@ -192,7 +192,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           className={cn(
             'flex items-center gap-3 rounded-lg px-3 py-2.5 text-label-lg font-medium transition-colors',
             isActive
-              ? 'bg-primary text-on-primary hover:bg-primary/90'
+              ? 'bg-primary/[var(--state-hover-opacity)] text-primary'
               : 'text-on-surface hover:bg-on-surface/[var(--state-hover-opacity)]',
           )}
         >
@@ -215,12 +215,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
       <aside
         className={cn(
-          'fixed top-0 left-0 z-modal flex h-full w-64 flex-col bg-surface transition-transform duration-normal ease-standard border-r border-outline-variant',
+          'fixed top-0 left-0 z-modal flex h-full w-64 flex-col bg-surface transition-transform duration-normal ease-standard border-r border-outline-variant/50',
           'lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:translate-x-0',
           isOpen ? 'translate-x-0' : '-translate-x-full',
         )}
       >
-        <div className="flex h-16 shrink-0 items-center justify-between px-4 border-b border-outline-variant">
+        <div className="flex h-16 shrink-0 items-center justify-between px-4 border-b border-outline-variant/50">
           <div className="flex items-center gap-3">
             <BrandLogo size="md" />
             <BrandName className="whitespace-nowrap font-semibold text-xl text-headline" />
