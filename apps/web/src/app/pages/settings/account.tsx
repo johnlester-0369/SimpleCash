@@ -131,7 +131,7 @@ export default function AccountSettingsView() {
             <p className="mt-1 text-muted">Manage your profile and password.</p>
           </div>
 
-          <Card.Root>
+          <Card.Root className="shadow-sm border border-outline-variant/25">
             <Card.Header withDivider>
               <Card.Title as="h3">Profile</Card.Title>
             </Card.Header>
@@ -186,7 +186,7 @@ export default function AccountSettingsView() {
             </Card.Body>
           </Card.Root>
 
-          <Card.Root>
+          <Card.Root className="shadow-sm border border-outline-variant/25">
             <Card.Header withDivider>
               <Card.Title as="h3">Password</Card.Title>
             </Card.Header>
@@ -253,7 +253,7 @@ export default function AccountSettingsView() {
             </Card.Body>
           </Card.Root>
 
-          <Card.Root>
+          <Card.Root className="shadow-sm border border-outline-variant/25">
             <Card.Header withDivider>
               <Card.Title as="h3">Session</Card.Title>
             </Card.Header>
