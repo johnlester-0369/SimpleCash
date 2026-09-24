@@ -257,7 +257,7 @@ export default function DashboardView() {
         )}
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Card.Root>
+          <Card.Root className="shadow-sm border border-outline-variant/25">
             <Card.Body>
               <p className="text-body-sm text-on-surface-variant">
                 Current Balance
@@ -270,7 +270,7 @@ export default function DashboardView() {
             </Card.Body>
           </Card.Root>
 
-          <Card.Root>
+          <Card.Root className="shadow-sm border border-outline-variant/25">
             <Card.Body>
               <div className="flex items-center gap-2">
                 {/* isGrowing still branches the card — the icon keeps
@@ -304,7 +304,7 @@ export default function DashboardView() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <Card.Root>
+          <Card.Root className="shadow-sm border border-outline-variant/25">
             <Card.Header withDivider>
               <div className="flex w-full items-center justify-between">
                 <Card.Title as="h2">Active Income</Card.Title>
@@ -346,7 +346,7 @@ export default function DashboardView() {
             </Card.Body>
           </Card.Root>
 
-          <Card.Root>
+          <Card.Root className="shadow-sm border border-outline-variant/25">
             <Card.Header withDivider>
               <div className="flex w-full items-center justify-between">
                 <Card.Title as="h2">Active Expenses</Card.Title>
@@ -393,7 +393,7 @@ export default function DashboardView() {
             pie chart — both derive entirely from figures already present
             in `data`, so no new API call is introduced. */}
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <Card.Root>
+          <Card.Root className="shadow-sm border border-outline-variant/25">
             <Card.Header withDivider>
               <Card.Title as="h2">Spend vs Save (Weekly)</Card.Title>
             </Card.Header>
@@ -471,7 +471,7 @@ export default function DashboardView() {
             </Card.Body>
           </Card.Root>
 
-          <Card.Root>
+          <Card.Root className="shadow-sm border border-outline-variant/25">
             <Card.Header withDivider>
               <Card.Title as="h2">Spent vs Saved (All Time)</Card.Title>
             </Card.Header>
@@ -523,7 +523,7 @@ export default function DashboardView() {
           </Card.Root>
         </div>
 
-        <Card.Root>
+        <Card.Root className="shadow-sm border border-outline-variant/25">
           <Card.Header withDivider>
             <div className="flex w-full items-center gap-2">
               <Card.Title as="h2">Recent Activity</Card.Title>
@@ -579,7 +579,7 @@ export default function DashboardView() {
             tasks, styled as icon cards matching the reference example.
             The grid goes 1 column on phones, 2 on tablets, 4 on large
             screens, mirroring the example's responsive behavior. */}
-        <Card.Root>
+        <Card.Root className="shadow-sm border border-outline-variant/25">
           <Card.Header withDivider>
             <Card.Title as="h3">Quick Actions</Card.Title>
           </Card.Header>
