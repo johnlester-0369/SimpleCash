@@ -87,7 +87,7 @@ export default function AdminLoginPage() {
         <Card.Root
           as="section"
           padding="lg"
-          className="w-full max-w-sm shadow-sm"
+          className="w-full max-w-sm shadow-sm border border-outline-variant/25"
         >
           <form
             onSubmit={handleSubmit(onSubmit)}

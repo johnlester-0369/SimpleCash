@@ -270,7 +270,7 @@ export default function ExpensesView() {
         )}
 
         {!isGenuinelyEmpty && (
-          <Card.Root>
+          <Card.Root className="shadow-sm border border-outline-variant/25">
             <Card.Body>
               <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                 <div className="relative min-w-[200px] flex-1">
@@ -294,7 +294,7 @@ export default function ExpensesView() {
           </Card.Root>
         )}
 
-        <Card.Root>
+        <Card.Root className="shadow-sm border border-outline-variant/25">
           <Card.Body>
             {isLoading ? (
               <Table.ScrollArea>
