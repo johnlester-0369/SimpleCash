@@ -50,7 +50,7 @@ export interface SelectProps {
  * Note: rounded-lg removed - will be added conditionally with pill prop
  */
 const buttonBase =
-  'inline-flex items-center justify-between font-medium focus:outline-none disabled:opacity-state-disabled disabled:cursor-not-allowed transition-all duration-fast'
+  'inline-flex items-center justify-between font-medium focus:outline-none disabled:opacity-state-disabled disabled:cursor-not-allowed transition-all duration-fast cursor-pointer'
 
 /**
  * Filled variant overlay structure
@@ -64,17 +64,18 @@ const filledStateLayer =
  */
 const variantClasses: Record<SelectVariant, string> = {
   default:
-    'bg-transparent text-on-surface border-2 border-outline-variant hover:bg-on-surface/[var(--state-hover-opacity)] active:bg-on-surface/[var(--state-pressed-opacity)] focus:border-primary',
+    'bg-transparent text-on-surface border border-outline-variant hover:bg-on-surface/[var(--state-hover-opacity)] active:bg-on-surface/[var(--state-pressed-opacity)] focus:outline-none focus:border-primary focus:ring-1 focus:ring-inset focus:ring-primary',
   filled: cn(
     filledStateLayer,
-    'bg-primary text-on-primary after:bg-on-primary border-2 border-transparent focus:border-on-primary/50 shadow-elevation-1 hover:shadow-elevation-2',
+    'bg-primary text-on-primary after:bg-on-primary border border-transparent focus:outline-none focus:border-on-primary/50 focus:ring-1 focus:ring-inset focus:ring-on-primary shadow-elevation-1 hover:shadow-elevation-2',
   ),
 }
 
 /**
  * Error state classes for default variant
  */
-const errorStateClass = 'border-error focus:border-error'
+const errorStateClass =
+  'border-error focus:outline-none focus:border-error focus:ring-1 focus:ring-inset focus:ring-error'
 
 const sizeClasses: Record<SelectSize, string> = {
   sm: 'px-3 py-1.5 text-body-sm gap-2',
@@ -482,7 +483,6 @@ const Select: React.FC<SelectProps> = ({
         aria-labelledby={labelId}
         aria-describedby={descriptionId}
         aria-controls={isOpen ? menuId : undefined}
-        aria-invalid={hasError || undefined}
       >
         {/* Content wrapper with z-raised to stay above ::after state layer for filled variant */}
         <span className="relative z-raised flex items-center gap-2 truncate">
