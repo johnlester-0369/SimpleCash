@@ -122,159 +122,163 @@ export default function AccountSettingsView() {
           content="Manage your admin account profile and password."
         />
       </Helmet>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold text-headline">Account Settings</h1>
-          <p className="mt-1 text-muted">Manage your profile and password.</p>
-        </div>
+      <div className="flex flex-col gap-6 max-w-2xl mx-auto pb-12">
+        <div className="space-y-6">
+          <div>
+            <h1 className="text-2xl font-bold text-headline">
+              Account Settings
+            </h1>
+            <p className="mt-1 text-muted">Manage your profile and password.</p>
+          </div>
 
-        <Card.Root>
-          <Card.Header withDivider>
-            <Card.Title as="h3">Profile</Card.Title>
-          </Card.Header>
-          <Card.Body>
-            <form
-              onSubmit={handleNameSubmit(onNameSubmit)}
-              className="flex flex-col gap-4"
-              noValidate
-            >
-              {nameSuccess && (
-                <Alert
-                  variant="tonal"
-                  color="success"
-                  title="Success"
-                  message={nameSuccess}
-                />
-              )}
-              {nameError && (
-                <Alert
-                  variant="tonal"
-                  color="error"
-                  title="Error"
-                  message={nameError}
-                />
-              )}
-              <Field.Root required invalid={!!nameErrors.name}>
-                <Field.Label>Name</Field.Label>
-                <Input {...registerName('name')} />
-                {nameErrors.name && (
-                  <p className="text-body-sm text-error">
-                    {nameErrors.name.message}
-                  </p>
+          <Card.Root>
+            <Card.Header withDivider>
+              <Card.Title as="h3">Profile</Card.Title>
+            </Card.Header>
+            <Card.Body>
+              <form
+                onSubmit={handleNameSubmit(onNameSubmit)}
+                className="flex flex-col gap-4"
+                noValidate
+              >
+                {nameSuccess && (
+                  <Alert
+                    variant="tonal"
+                    color="success"
+                    title="Success"
+                    message={nameSuccess}
+                  />
                 )}
-              </Field.Root>
-              {/* Display-only — email changes are disabled for admin accounts,
+                {nameError && (
+                  <Alert
+                    variant="tonal"
+                    color="error"
+                    title="Error"
+                    message={nameError}
+                  />
+                )}
+                <Field.Root required invalid={!!nameErrors.name}>
+                  <Field.Label>Name</Field.Label>
+                  <Input {...registerName('name')} />
+                  {nameErrors.name && (
+                    <p className="text-body-sm text-error">
+                      {nameErrors.name.message}
+                    </p>
+                  )}
+                </Field.Root>
+                {/* Display-only — email changes are disabled for admin accounts,
                 so this is a plain read-only field with no submit affordance */}
-              <Field.Root disabled>
-                <Field.Label>Email</Field.Label>
-                <Input value={session?.user?.email ?? ''} disabled readOnly />
-              </Field.Root>
-              <div className="flex justify-end">
-                <Button
-                  type="submit"
-                  variant="filled"
-                  color="primary"
-                  isLoading={isNameSubmitting}
-                >
-                  Save
-                </Button>
-              </div>
-            </form>
-          </Card.Body>
-        </Card.Root>
+                <Field.Root disabled>
+                  <Field.Label>Email</Field.Label>
+                  <Input value={session?.user?.email ?? ''} disabled readOnly />
+                </Field.Root>
+                <div className="flex justify-end">
+                  <Button
+                    type="submit"
+                    variant="filled"
+                    color="primary"
+                    isLoading={isNameSubmitting}
+                  >
+                    Save
+                  </Button>
+                </div>
+              </form>
+            </Card.Body>
+          </Card.Root>
 
-        <Card.Root>
-          <Card.Header withDivider>
-            <Card.Title as="h3">Password</Card.Title>
-          </Card.Header>
-          <Card.Body>
-            <form
-              onSubmit={handlePasswordSubmit(onPasswordSubmit)}
-              className="flex flex-col gap-4"
-              noValidate
-            >
-              {passwordSuccess && (
-                <Alert
-                  variant="tonal"
-                  color="success"
-                  title="Success"
-                  message={passwordSuccess}
-                />
-              )}
-              {passwordError && (
-                <Alert
-                  variant="tonal"
-                  color="error"
-                  title="Error"
-                  message={passwordError}
-                />
-              )}
-              <Field.Root required invalid={!!passwordErrors.currentPassword}>
-                <Field.Label>Current password</Field.Label>
-                <PasswordInput {...registerPassword('currentPassword')} />
-                {passwordErrors.currentPassword && (
-                  <p className="text-body-sm text-error">
-                    {passwordErrors.currentPassword.message}
-                  </p>
+          <Card.Root>
+            <Card.Header withDivider>
+              <Card.Title as="h3">Password</Card.Title>
+            </Card.Header>
+            <Card.Body>
+              <form
+                onSubmit={handlePasswordSubmit(onPasswordSubmit)}
+                className="flex flex-col gap-4"
+                noValidate
+              >
+                {passwordSuccess && (
+                  <Alert
+                    variant="tonal"
+                    color="success"
+                    title="Success"
+                    message={passwordSuccess}
+                  />
                 )}
-              </Field.Root>
-              <Field.Root required invalid={!!passwordErrors.newPassword}>
-                <Field.Label>New password</Field.Label>
-                <PasswordInput {...registerPassword('newPassword')} />
-                {passwordErrors.newPassword && (
-                  <p className="text-body-sm text-error">
-                    {passwordErrors.newPassword.message}
-                  </p>
+                {passwordError && (
+                  <Alert
+                    variant="tonal"
+                    color="error"
+                    title="Error"
+                    message={passwordError}
+                  />
                 )}
-              </Field.Root>
-              <Field.Root required invalid={!!passwordErrors.confirmPassword}>
-                <Field.Label>Confirm new password</Field.Label>
-                <PasswordInput {...registerPassword('confirmPassword')} />
-                {passwordErrors.confirmPassword && (
-                  <p className="text-body-sm text-error">
-                    {passwordErrors.confirmPassword.message}
-                  </p>
-                )}
-              </Field.Root>
-              <div className="flex justify-end">
-                <Button
-                  type="submit"
-                  variant="filled"
-                  color="primary"
-                  isLoading={isPasswordSubmitting}
-                >
-                  Update Password
-                </Button>
-              </div>
-            </form>
-          </Card.Body>
-        </Card.Root>
+                <Field.Root required invalid={!!passwordErrors.currentPassword}>
+                  <Field.Label>Current password</Field.Label>
+                  <PasswordInput {...registerPassword('currentPassword')} />
+                  {passwordErrors.currentPassword && (
+                    <p className="text-body-sm text-error">
+                      {passwordErrors.currentPassword.message}
+                    </p>
+                  )}
+                </Field.Root>
+                <Field.Root required invalid={!!passwordErrors.newPassword}>
+                  <Field.Label>New password</Field.Label>
+                  <PasswordInput {...registerPassword('newPassword')} />
+                  {passwordErrors.newPassword && (
+                    <p className="text-body-sm text-error">
+                      {passwordErrors.newPassword.message}
+                    </p>
+                  )}
+                </Field.Root>
+                <Field.Root required invalid={!!passwordErrors.confirmPassword}>
+                  <Field.Label>Confirm new password</Field.Label>
+                  <PasswordInput {...registerPassword('confirmPassword')} />
+                  {passwordErrors.confirmPassword && (
+                    <p className="text-body-sm text-error">
+                      {passwordErrors.confirmPassword.message}
+                    </p>
+                  )}
+                </Field.Root>
+                <div className="flex justify-end">
+                  <Button
+                    type="submit"
+                    variant="filled"
+                    color="primary"
+                    isLoading={isPasswordSubmitting}
+                  >
+                    Update Password
+                  </Button>
+                </div>
+              </form>
+            </Card.Body>
+          </Card.Root>
 
-        <Card.Root>
-          <Card.Header withDivider>
-            <Card.Title as="h3">Session</Card.Title>
-          </Card.Header>
-          <Card.Body>
-            {/* Stacks vertically on phones (description above button, full
+          <Card.Root>
+            <Card.Header withDivider>
+              <Card.Title as="h3">Session</Card.Title>
+            </Card.Header>
+            <Card.Body>
+              {/* Stacks vertically on phones (description above button, full
                 width) and switches to a horizontal row from sm (tablet) up —
                 the previous fixed row crowded the description against the
                 outline button under narrow widths. */}
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-body-sm text-on-surface-variant">
-                Sign out of your admin session on this device.
-              </p>
-              <Button
-                variant="outline"
-                color="error"
-                leftIcon={<LogOut className="h-4 w-4" />}
-                onClick={handleLogout}
-                isLoading={isLoggingOut}
-              >
-                Log out
-              </Button>
-            </div>
-          </Card.Body>
-        </Card.Root>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-body-sm text-on-surface-variant">
+                  Sign out of your admin session on this device.
+                </p>
+                <Button
+                  variant="outline"
+                  color="error"
+                  leftIcon={<LogOut className="h-4 w-4" />}
+                  onClick={handleLogout}
+                  isLoading={isLoggingOut}
+                >
+                  Log out
+                </Button>
+              </div>
+            </Card.Body>
+          </Card.Root>
+        </div>
       </div>
     </>
   )
